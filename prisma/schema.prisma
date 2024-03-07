@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String    @unique
+  password     String
+  posts        Post[]
+  user_profile String?
+  bio          String?
+  join_date    DateTime  @default(now())
+  Comment      Comment[]
+}
+
+model Post {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id])
+  title         String
+  content       String
+  userId        String    @db.ObjectId
+  post_view     Int?      @default(0)
+  post_date     DateTime  @default(now())
+  post_update   DateTime  @updatedAt
+  comments      Comment[]
+  post_type     String    @default("Question")
+  Category      Category? @relation(fields: [Category_name], references: [category_id])
+  Category_name String?   @default("Other")
+}
+
+model Category {
+  category_id   String @id @map("_id")
+  category_name String @default("Other")
+  posts         Post[]
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  comment String
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String @db.ObjectId
+  user_id String @db.ObjectId
+  user    User   @relation(fields: [user_id], references: [id])
+}
