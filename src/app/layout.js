@@ -1,6 +1,7 @@
 
 import "./globals.css";
 import Provider from "./components/Provider";
+import Wrapper from "./components/Wrapper";
 
 export const metadata = {
   title: "Web Forum",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body >
         <Provider>
+          <Wrapper>
           {children}
+          </Wrapper>
         </Provider>
       </body>
     </html>
