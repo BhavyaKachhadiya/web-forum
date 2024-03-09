@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 
 const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
