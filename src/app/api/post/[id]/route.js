@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { connectDB } from "../../../../../utils";
 import { NextResponse } from 'next/server';
-import { data } from 'autoprefixer';
 
 const prisma = new PrismaClient();
 export const GET = async(req, { params }) =>
