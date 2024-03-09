@@ -36,8 +36,8 @@ model Post {
   post_update   DateTime  @updatedAt
   comments      Comment[]
   post_type     String    @default("Question")
-  Category      Category? @relation(fields: [Category_name], references: [category_id])
-  Category_name String?   @default("Other")
+  category      Category? @relation(fields: [category_name], references: [category_id])
+  category_name String?   @default("Other")
 }
 
 model Category {

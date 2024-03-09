@@ -19,29 +19,43 @@ export const GET = async(req) =>
 };
 
 
-export const POST = async(req) =>
-{
+export const POST = async(req) => {
     try {
-        const {title,userId,content} = await req.json();
-        if(!title|| !userId || !content)
-        {
-        return NextResponse.json({error: "Invalid Data"},{status:422});
+        const { title, userId, content, category_name } = await req.json();
+        if (!title || !userId || !content || !category_name) {
+            return NextResponse.json({ error: "Invalid Data" }, { status: 422 });
+        }
 
-        }
         await connectDB();
-        const user = await prisma.user.findFirst({where: {id: userId}});
-        if (!user)
-        {
-            return NextResponse.json({message: "Invalid User"},{status:401});
+
+        // Find or create the user
+        let user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            // Create a new user if not found
+            user = await prisma.user.create({
+                data: {
+                    id: userId, // Assuming ID is passed in the request
+                    // Add other user fields as needed
+                }
+            });
         }
-        const post = await prisma.post.create({data: {title,userId,content}});
-        return NextResponse.json({post},{status:200});
+
+        // Create the post with the user ID
+        const post = await prisma.post.create({
+            data: {
+                title,
+                userId,
+                content,
+                category_name
+            }
+        });
+
+        return NextResponse.json({ post }, { status: 200 });
 
     } catch (error) {
         console.error(error);
-        return NextResponse.json({error: error.message},{status:500});
-    } finally
-    {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    } finally {
         await prisma.$disconnect();
     }
 };

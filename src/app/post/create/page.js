@@ -6,6 +6,9 @@ import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css'
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const CustomReactQuill = styled(ReactQuill)`
 .ql-toolbar.ql-snow , .ql-container.ql-snow{border: none !important;}
@@ -31,6 +34,14 @@ const CustomReactQuill = styled(ReactQuill)`
 }
 `;
 const page = () => {
+  const router = useRouter();
+  const {data:session} = useSession();
+  console.log(session);
+  if (!session) {
+    // Redirect to login if not authenticated
+    router.push('/login'); // Use appropriate routing library (e.g., react-router-dom)
+    return null;
+  }
   const [value, setValue] = useState('');
 
   const handleChange = (content) => {
@@ -60,59 +71,88 @@ const page = () => {
     'link', 'image', 'video'
   ];
 
-  const toolbarStyle = {
-    color: 'red', // Change the color to your desired color
-  };
   const data = [
     {
       category: "Frontend",
-      link: "/category/frontend",
+      link: "frontend",
       subcategories: [
-        { name: "Framework", link: "/category/frontend/framework" },
-        { name: "UI Framework", link: "/category/frontend/ui-framework" },
-        { name: "State Management", link: "/category/frontend/state-management" }
+        { name: "Framework", link: "framework" },
+        { name: "UI Framework", link: "ui-framework" },
+        { name: "State Management", link: "state-management" }
       ]
     },
     {
       category: "Backend",
-      link: "/category/backend",
+      link: "backend",
       subcategories: [
-        { name: "Database", link: "/category/backend/database" },
-        { name: "API", link: "/category/backend/api" },
-        { name: "Authentication", link: "/category/backend/authentication" },
-        { name: "ORM", link: "/category/backend/orm" }
+        { name: "Database", link: "database" },
+        { name: "API", link: "api" },
+        { name: "Authentication", link: "authentication" },
+        { name: "ORM", link: "orm" }
       ]
     },
     {
       category: "Deployment",
-      link: "/category/deployment",
+      link: "deployment",
       subcategories: [
-        { name: "DevOps", link: "/category/deployment/devops" },
-        { name: "Continuous Integration", link: "/category/deployment/ci" },
-        { name: "Containerization", link: "/category/deployment/containerization" },
-        { name: "Serverless", link: "/category/deployment/serverless" }
+        { name: "DevOps", link: "devops" },
+        { name: "Continuous Integration", link: "ci" },
+        { name: "Containerization", link: "containerization" },
+        { name: "Serverless", link: "serverless" }
       ]
     },
     {
       category: "Other",
-      link: "/category/other",
+      link: "other",
       subcategories: [
-        { name: "Other", link: "/category/other" },
+        { name: "Other", link: "other" },
       ]
     }
   ];
 
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  // Collect form data using formData (consider using state management for large forms)
+  const title = event.target.title.value;
+const category_name = event.target.category.value;
+const content = value; // Assuming value contains the content from the editor
+const userId= session?.user?.id // Assuming you have access to the user ID from the session
+const user= session?.user?.id // Assuming you have access to the user ID from the session
+// const user = session?.user?.name // Assuming you have access to the user ID from the session
+
+
+  try {
+    const response = await axios.post('/api/posts', {
+      title,
+      userId,
+      content,
+      category_name,
+      user
+    });
+console.log("i am in")
+    if (response.status === 200) {
+      // Handle successful response (e.g., redirect to success page)
+      router.push('/');
+    } else {
+      throw new Error('Failed to post data');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle errors appropriately (e.g., display error messages to the user)
+  }
+};
+
   return (
     <div>
+      <form method="POST" onSubmit={handleSubmit}>
       <div className="top flex mt-5">
-
         <div className='img'>
-          <Image src={"/image.png"} width={75} height={75} />
+          <Image src={session?.user?.image} className='border-0 rounded-full' width={75} height={75} />
         </div>
         <div className='lg:ml-10 ml-3 flex flex-col justify-between w-[100%]'>
-          <div className='flex flex-row  justify-between '> <input type="text" name="question" id="" className='outline-none bg-transparent placeholder:text-[1rem] placeholder:text-s-blue text-s-blue lg:w-[50rem] w-[15rem]' placeholder='Write a Question' /> <Link href={"/"} className='text-red'>X</Link> </div>
+          <div className='flex flex-row  justify-between '> <input type="text" name="title" id="title" className='outline-none bg-transparent placeholder:text-[1rem] placeholder:text-s-blue text-s-blue lg:w-[50rem] w-[15rem]' placeholder='Write a Question' /> <Link href={"/"} className='text-red'>X</Link> </div>
           <div className="tags">
-            <select className='bg-transparent text-s-blue ' defaultValue={"/category/other"}>
+            <select className='bg-transparent text-s-blue ' name="category" defaultValue={"other"}>
               {data.map((item, index) => (
                 <optgroup label={item.category} key={index} className='bg-blue'>
                   {item.subcategories && item.subcategories.map((subItem, subIndex) => (
@@ -137,8 +177,9 @@ const page = () => {
       </div>
 
       <div>
-        <button className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
+        <button type='submit' className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
       </div>
+      </form>
     </div>
   )
 }
