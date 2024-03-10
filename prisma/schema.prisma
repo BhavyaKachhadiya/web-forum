@@ -32,18 +32,14 @@ model Post {
   content       String
   userId        String    @db.ObjectId
   post_view     Int?      @default(0)
+  post_like     Int?      @default(0)
+  post_dislike  Int?      @default(0)
   post_date     DateTime  @default(now())
   post_update   DateTime  @updatedAt
   comments      Comment[]
   post_type     String    @default("Question")
-  category      Category? @relation(fields: [category_name], references: [category_id])
-  category_name String?   @default("Other")
-}
-
-model Category {
-  category_id   String @id @map("_id")
-  category_name String @default("Other")
-  posts         Post[]
+  category_id   String?   @db.ObjectId
+  category_name String?   @default("other")
 }
 
 model Comment {
