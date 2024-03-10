@@ -21,7 +21,9 @@ export const POST = async (req, res) => {
         const { title, userId, content, category_name } = await req.json();
 
         await connectDB();
-
+        const user =  await prisma.user.findFirst({
+            where:{id:userId}
+        })
         // Create the post with the user ID and category name
         const post = await prisma.post.create({
             data: {
@@ -29,7 +31,10 @@ export const POST = async (req, res) => {
                 content,
                 category_name,
                 user: { connect: { id: userId } }, // Connect the post to the user by their ID
-            }
+                userName: user.name, // Store the userName in the post table
+                userImage: user.user_profile, // Store the userEmail in the post table
+            },
+            include: { user: true }, // Include the user information in the response
         });
 
         // Update the user's posts array using the $connect operation

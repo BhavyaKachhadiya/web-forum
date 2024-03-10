@@ -1,15 +1,17 @@
 import Image from 'next/image'
+import Link from 'next/link';
 import React from 'react'
 
-const Post = () => {
+const Post = ({post}) => {
+    const { userImage, title, category_name,post_view,post_like,post_dislike,id } = post;
     return (
         <div className=' h-[4.69rem] py-3 px-2  grid grid-cols-12 mb-5'>
             <div className='img '>
-                <Image src="/image.png" height={50} width={50} alt="img" />
+                <Image src={userImage} height={50} width={50} alt="img" className='border-0 rounded-full'/>
             </div>
             <div className='post flex flex-col justify-between lg:col-span-9 col-span-11 ml-4 lg:ml-0'>
-                <p className='font-medium text-[.75rem]'>What are the main technologies and tools used in front-end web development?</p>
-                <p className='font-medium text-[.75rem] bg-red w-min px-[.35rem] py-[.1rem] border-0 rounded-md'>Frontend</p>
+                <Link href={`/p/${id}`}className='font-medium text-[.75rem]'>{title}</Link>
+                <p  className='font-medium text-[.75rem] bg-red w-min px-[.35rem] py-[.1rem] border-0 rounded-md'>{category_name}</p>
             </div>
             <div className='post-details grid-cols-2 grid-rows-2 lg:grid gap-y-3 gap-x-[4.5rem] ml-[2rem] hidden'>
                 <div className='view flex gap-3 items-center'>
@@ -25,7 +27,7 @@ const Post = () => {
                             </defs>
                         </svg>
                     </div>
-                    <div className='views'><span className='font-medium text-[.75rem]'>1k</span></div>
+                    <div className='views'><span className='font-medium text-[.75rem]'>{post_view}</span></div>
                 </div>
                 <div className='view flex gap-3 items-center'>
                     <div className='icon'>
@@ -34,7 +36,7 @@ const Post = () => {
                         </svg>
 
                     </div>
-                    <div className='views'><span className='font-medium text-[.75rem]'>1K</span></div>
+                    <div className='views'><span className='font-medium text-[.75rem]'>{post_like}</span></div>
                 </div>
                 <div className='view flex gap-3 items-center'>
                     <div className='icon'>
@@ -50,7 +52,7 @@ const Post = () => {
                         </svg>
 
                     </div>
-                    <div className='views'><span className='font-medium text-[.75rem]'>1K</span></div>
+                    <div className='views'><span className='font-medium text-[.75rem]'>0</span></div>
                 </div>
                 <div className='view flex gap-3 items-center'>
                     <div className='icon'>
@@ -59,7 +61,7 @@ const Post = () => {
                         </svg>
 
                     </div>
-                    <div className='views'><span className='font-medium text-[.75rem]'>1K</span></div>
+                    <div className='views'><span className='font-medium text-[.75rem]'>{post_dislike}</span></div>
                 </div>
             </div>
         </div>

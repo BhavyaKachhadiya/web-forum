@@ -1,33 +1,51 @@
-"use client"
+'use client'
 import Navbar from '@/app/components/Navbar';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-
+import axios from 'axios';
 const Page = ({ params }) => {
-    const [postData, setPostData] = useState(null);
-
-    useEffect(() => {
-        // Fetch post data based on the title from params
-        async function fetchPost() {
-            try {
-                const response = await fetch(`/api/post/${params.p}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setPostData(data);
-                    console.log(data);
-                } else {
-                    console.error('Failed to fetch post data');
-                }
-            } catch (error) {
-                console.error('Error fetching post data:', error);
+    const [postData, setPostData] = useState({});
+    const [likeCount, setLikeCount] = useState(postData?.post?.[0]?.post_like); 
+    const fetchPost = async () => {
+        try {
+            const response = await fetch(`/api/post/${params.p}`);
+            if (response.ok) {
+                const data = await response.json();
+                setPostData(data);
+                console.log(data);
+            } else {
+                console.error('Failed to fetch post data');
             }
+        } catch (error) {
+            console.error('Error fetching post data:', error);
         }
-
-        fetchPost();
-    }, [params.p]);
+    };
+    
+    
     let date = postData?.post?.[0]?.post_date;
     let newdate = String(date);
     let fdate = newdate.substring(0, 10)
+    
+    const handleLike = async () => {
+        try {
+            // Call the API route to increment the post_like count
+            await axios.post('/api/like', { postId: postData?.post[0]?.id});
+    
+            // Fetch updated post data to get the latest post_like count
+            await fetchPost();
+    
+            // Update the like count in the UI
+            setLikeCount(prevCount => prevCount + 1);
+            console.log("Liked");
+        } catch (error) {
+            console.error('Error liking post:', error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchPost(); // Fetch post data when the component mounts
+    }, [params.p]); // Re-run fetchPost when params.p changes
+
     return (
         <>
             <Navbar />
@@ -44,11 +62,11 @@ const Page = ({ params }) => {
                 <div>
                 <div className='profile flex'>
                     <div className='img'>
-                        <Image src={"/image.png"} height={100} width={100}></Image>
+                        <Image src={postData?.post?.[0]?.userImage} className='border-0 rounded-full' height={100} width={100}></Image>
                     </div>
                     <div className="detail flex justify-between flex-col ml-6">
                         <div className="p1">
-                            <div className="name text-[.75rem] font-medium">Username</div>
+                            <div className="name text-[.75rem] font-medium">{postData?.post?.[0]?.userName}</div>
                             <div className="post-date text-[.75rem] font-medium text-s-blue ">{fdate}</div>
                         </div>
                         <div className="p2 flex gap-3">
@@ -119,13 +137,13 @@ const Page = ({ params }) => {
 
                             </div>
 
-                            <div className='like flex gap-2'>
+                            <button className='like flex gap-2 '  onClick={handleLike} >
 
                                 <div className="like-icon">
 
-                                    <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg  width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-                                        <path d="M12.2422 0.0356663C13.2578 0.23297 13.918 1.19293 13.7148 2.17945L13.625 2.612C13.418 3.62508 13.0352 4.58883 12.5 5.46531H18.125C19.1602 5.46531 20 6.28109 20 7.28658C20 7.98853 19.5898 8.59941 18.9883 8.90296C19.4141 9.23685 19.6875 9.74908 19.6875 10.322C19.6875 11.2099 19.0312 11.9498 18.168 12.1091C18.3398 12.3861 18.4375 12.7086 18.4375 13.0539C18.4375 13.8621 17.8945 14.5489 17.1445 14.7841C17.1719 14.9093 17.1875 15.0421 17.1875 15.1787C17.1875 16.1842 16.3477 17 15.3125 17H11.5039C10.7617 17 10.0391 16.7875 9.42188 16.3891L7.91797 15.414C6.875 14.7386 6.25 13.6003 6.25 12.3823V10.9291V9.10785V8.16306C6.25 7.05513 6.76953 6.01169 7.65625 5.31734L7.94531 5.09347C8.98047 4.28908 9.6875 3.15838 9.94531 1.89867L10.0352 1.46612C10.2383 0.4796 11.2266 -0.161637 12.2422 0.0356663ZM1.25 6.0724H3.75C4.44141 6.0724 5 6.61499 5 7.28658V15.7858C5 16.4574 4.44141 17 3.75 17H1.25C0.558594 17 0 16.4574 0 15.7858V7.28658C0 6.61499 0.558594 6.0724 1.25 6.0724Z" fill="#5C6470" />
+                                        <path className='active:fill-red focus:ring focus:fill-red ' d="M12.2422 0.0356663C13.2578 0.23297 13.918 1.19293 13.7148 2.17945L13.625 2.612C13.418 3.62508 13.0352 4.58883 12.5 5.46531H18.125C19.1602 5.46531 20 6.28109 20 7.28658C20 7.98853 19.5898 8.59941 18.9883 8.90296C19.4141 9.23685 19.6875 9.74908 19.6875 10.322C19.6875 11.2099 19.0312 11.9498 18.168 12.1091C18.3398 12.3861 18.4375 12.7086 18.4375 13.0539C18.4375 13.8621 17.8945 14.5489 17.1445 14.7841C17.1719 14.9093 17.1875 15.0421 17.1875 15.1787C17.1875 16.1842 16.3477 17 15.3125 17H11.5039C10.7617 17 10.0391 16.7875 9.42188 16.3891L7.91797 15.414C6.875 14.7386 6.25 13.6003 6.25 12.3823V10.9291V9.10785V8.16306C6.25 7.05513 6.76953 6.01169 7.65625 5.31734L7.94531 5.09347C8.98047 4.28908 9.6875 3.15838 9.94531 1.89867L10.0352 1.46612C10.2383 0.4796 11.2266 -0.161637 12.2422 0.0356663ZM1.25 6.0724H3.75C4.44141 6.0724 5 6.61499 5 7.28658V15.7858C5 16.4574 4.44141 17 3.75 17H1.25C0.558594 17 0 16.4574 0 15.7858V7.28658C0 6.61499 0.558594 6.0724 1.25 6.0724Z" fill="#5C6470" />
 
                                     </svg>
 
@@ -133,9 +151,9 @@ const Page = ({ params }) => {
 
                                 </div>
 
-                                <div className="like-number text-[.75rem] font-medium text-s-blue "><span>1k</span></div>
+                                <div className="like-number text-[.75rem] font-medium text-s-blue"><span >{postData?.post?.[0]?.post_like}</span></div>
 
-                            </div>
+                            </button>
 
                             <div className='unlike flex gap-2'>
 
@@ -153,7 +171,7 @@ const Page = ({ params }) => {
 
                                 </div>
 
-                                <div className="unlike-number text-[.75rem] font-medium text-s-blue "><span>1k</span></div>
+                                <div className="unlike-number text-[.75rem] font-medium text-s-blue "><span>{postData?.post?.[0]?.post_dislike}</span></div>
 
                             </div>
 

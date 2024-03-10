@@ -31,6 +31,8 @@ model Post {
   title         String
   content       String
   userId        String    @db.ObjectId
+  userName      String?
+  userImage     String
   post_view     Int?      @default(0)
   post_like     Int?      @default(0)
   post_dislike  Int?      @default(0)
