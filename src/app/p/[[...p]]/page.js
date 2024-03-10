@@ -6,6 +6,7 @@ import axios from 'axios';
 const Page = ({ params }) => {
     const [postData, setPostData] = useState({});
     const [likeCount, setLikeCount] = useState(postData?.post?.[0]?.post_like); 
+    const [DislikeCount, setDisLikeCount] = useState(postData?.post?.[0]?.post_dislike); 
     const fetchPost = async () => {
         try {
             const response = await fetch(`/api/post/${params.p}`);
@@ -39,6 +40,21 @@ const Page = ({ params }) => {
             console.log("Liked");
         } catch (error) {
             console.error('Error liking post:', error);
+        }
+    };
+    const handleDisLike = async () => {
+        try {
+            // Call the API route to increment the post_like count
+            await axios.post('/api/dislike', { postId: postData?.post[0]?.id});
+    
+            // Fetch updated post data to get the latest post_like count
+            await fetchPost();
+    
+            // Update the like count in the UI
+            setDisLikeCount(prevCount => prevCount + 1);
+            console.log("UnLiked");
+        } catch (error) {
+            console.error('Error Disliking post:', error);
         }
     };
     
@@ -155,13 +171,13 @@ const Page = ({ params }) => {
 
                             </button>
 
-                            <div className='unlike flex gap-2'>
+                            <button className='unlike flex gap-2' onClick={handleDisLike}>
 
                                 <div className="unlike-icon">
 
                                     <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-                                        <path d="M12.2422 17.9622C13.2578 17.7533 13.918 16.7369 13.7148 15.6923L13.625 15.2344C13.418 14.1617 13.0352 13.1412 12.5 12.2132H18.125C19.1602 12.2132 20 11.3494 20 10.2848C20 9.54156 19.5898 8.89474 18.9883 8.57334C19.4141 8.2198 19.6875 7.67744 19.6875 7.0708C19.6875 6.1307 19.0312 5.34729 18.168 5.17856C18.3398 4.88528 18.4375 4.54379 18.4375 4.1782C18.4375 3.32247 17.8945 2.5953 17.1445 2.34622C17.1719 2.21364 17.1875 2.07303 17.1875 1.9284C17.1875 0.863762 16.3477 0 15.3125 0H11.5039C10.7617 0 10.0391 0.22498 9.42188 0.646817L7.91797 1.67931C6.875 2.39443 6.25 3.59968 6.25 4.8893V6.428V8.3564V9.35675C6.25 10.5299 6.76953 11.6347 7.65625 12.3699L7.94531 12.6069C8.98047 13.4586 9.6875 14.6558 9.94531 15.9896L10.0352 16.4476C10.2383 17.4922 11.2266 18.1711 12.2422 17.9622ZM1.25 14.1416H3.75C4.44141 14.1416 5 13.5671 5 12.856V3.8568C5 3.1457 4.44141 2.5712 3.75 2.5712H1.25C0.558594 2.5712 0 3.1457 0 3.8568V12.856C0 13.5671 0.558594 14.1416 1.25 14.1416Z" fill="#5C6470" />
+                                        <path className='active:fill-red focus:ring focus:fill-red ' d="M12.2422 17.9622C13.2578 17.7533 13.918 16.7369 13.7148 15.6923L13.625 15.2344C13.418 14.1617 13.0352 13.1412 12.5 12.2132H18.125C19.1602 12.2132 20 11.3494 20 10.2848C20 9.54156 19.5898 8.89474 18.9883 8.57334C19.4141 8.2198 19.6875 7.67744 19.6875 7.0708C19.6875 6.1307 19.0312 5.34729 18.168 5.17856C18.3398 4.88528 18.4375 4.54379 18.4375 4.1782C18.4375 3.32247 17.8945 2.5953 17.1445 2.34622C17.1719 2.21364 17.1875 2.07303 17.1875 1.9284C17.1875 0.863762 16.3477 0 15.3125 0H11.5039C10.7617 0 10.0391 0.22498 9.42188 0.646817L7.91797 1.67931C6.875 2.39443 6.25 3.59968 6.25 4.8893V6.428V8.3564V9.35675C6.25 10.5299 6.76953 11.6347 7.65625 12.3699L7.94531 12.6069C8.98047 13.4586 9.6875 14.6558 9.94531 15.9896L10.0352 16.4476C10.2383 17.4922 11.2266 18.1711 12.2422 17.9622ZM1.25 14.1416H3.75C4.44141 14.1416 5 13.5671 5 12.856V3.8568C5 3.1457 4.44141 2.5712 3.75 2.5712H1.25C0.558594 2.5712 0 3.1457 0 3.8568V12.856C0 13.5671 0.558594 14.1416 1.25 14.1416Z" fill="#5C6470" />
 
                                     </svg>
 
@@ -173,7 +189,7 @@ const Page = ({ params }) => {
 
                                 <div className="unlike-number text-[.75rem] font-medium text-s-blue "><span>{postData?.post?.[0]?.post_dislike}</span></div>
 
-                            </div>
+                            </button>
 
                         </div>
 
