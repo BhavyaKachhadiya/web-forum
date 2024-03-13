@@ -196,7 +196,7 @@ const Page = ({ params }) => {
                     </div>
 
                 </div>
-                <div>{postData?.post?.[0]?.content}</div>
+                <div dangerouslySetInnerHTML={{ __html: postData?.post?.[0]?.content }}></div>
                 </div>
             )}
         </>

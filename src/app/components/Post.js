@@ -26,7 +26,7 @@ const Post = ({post}) => {
             </div>
             <div className='post flex flex-col justify-between lg:col-span-9 col-span-11 ml-4 lg:ml-0'>
                 <Link href={`/p/${id}`} onClick={handlePostView} className='font-medium text-[.75rem]'>{title}</Link>
-                <p  className='font-medium text-[.75rem] bg-red w-min px-[.35rem] py-[.1rem] border-0 rounded-md'>{category_name}</p>
+                <p  className='font-medium text-[.75rem] bg-red w-max px-[.35rem] py-[.1rem] border-0 rounded-md'>{category_name}</p>
             </div>
             <div className='post-details grid-cols-2 grid-rows-2 lg:grid gap-y-3 gap-x-[4.5rem] ml-[2rem] hidden'>
                 <div className='view flex gap-3 items-center'>
