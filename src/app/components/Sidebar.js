@@ -21,29 +21,29 @@ const Sidebar = () => {
             category: "Frontend",
             link: "/category/frontend",
             subcategories: [
-                { name: "Framework", link: "/category/frontend/framework" },
-                { name: "UI Framework", link: "/category/frontend/ui-framework" },
-                { name: "State Management", link: "/category/frontend/state-management" }
+                { name: "Framework", link: "/category/framework" },
+                { name: "UI Framework", link: "/category/ui-framework" },
+                { name: "State Management", link: "/category/state-management" }
             ]
         },
         {
             category: "Backend",
             link: "/category/backend",
             subcategories: [
-                { name: "Database", link: "/category/backend/database" },
-                { name: "API", link: "/category/backend/api" },
-                { name: "Authentication", link: "/category/backend/authentication" },
-                { name: "ORM", link: "/category/backend/orm" }
+                { name: "Database", link: "/category/database" },
+                { name: "API", link: "/category/api" },
+                { name: "Authentication", link: "/category/authentication" },
+                { name: "ORM", link: "/category/orm" }
             ]
         },
         {
             category: "Deployment",
             link: "/category/deployment",
             subcategories: [
-                { name: "DevOps", link: "/category/deployment/devops" },
-                { name: "Continuous Integration", link: "/category/deployment/ci" },
-                { name: "Containerization", link: "/category/deployment/containerization" },
-                { name: "Serverless", link: "/category/deployment/serverless" }
+                { name: "DevOps", link: "/category/devops" },
+                { name: "Continuous Integration", link: "/category/ci" },
+                { name: "Containerization", link: "/category/containerization" },
+                { name: "Serverless", link: "/category/serverless" }
             ]
         },
         {
