@@ -1,16 +1,31 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link';
-import React from 'react'
-
+import React, { useState } from 'react'
+import axios from 'axios';
 const Post = ({post}) => {
     const { userImage, title, category_name,post_view,post_like,post_dislike,id } = post;
+    const [postView,setPostView] = useState(post_view);
+
+    const handlePostView = async () => {
+        try {
+            // Call the API route to increment the post_like count
+            await axios.post('/api/viewcount', { postId: id});
+    
+            // Update the like count in the UI
+            setPostView(prevCount => prevCount + 1);
+            console.log("View ++");
+        } catch (error) {
+            console.error('Error View ++ post:', error);
+        }
+    };
     return (
         <div className=' h-[4.69rem] py-3 px-2  grid grid-cols-12 mb-5'>
             <div className='img '>
                 <Image src={userImage} height={50} width={50} alt="img" className='border-0 rounded-full'/>
             </div>
             <div className='post flex flex-col justify-between lg:col-span-9 col-span-11 ml-4 lg:ml-0'>
-                <Link href={`/p/${id}`}className='font-medium text-[.75rem]'>{title}</Link>
+                <Link href={`/p/${id}`} onClick={handlePostView} className='font-medium text-[.75rem]'>{title}</Link>
                 <p  className='font-medium text-[.75rem] bg-red w-min px-[.35rem] py-[.1rem] border-0 rounded-md'>{category_name}</p>
             </div>
             <div className='post-details grid-cols-2 grid-rows-2 lg:grid gap-y-3 gap-x-[4.5rem] ml-[2rem] hidden'>
