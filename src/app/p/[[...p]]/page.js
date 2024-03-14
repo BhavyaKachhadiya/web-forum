@@ -3,6 +3,38 @@ import Navbar from '@/app/components/Navbar';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import styled from 'styled-components';
+
+const modules = {
+    toolbar: [],
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    }
+  };
+
+const CustomReactQuill = styled(ReactQuill)`
+.ql-toolbar.ql-snow , .ql-container.ql-snow{border: none !important;}
+  
+
+.ql-editor.ql-blank::before 
+{
+  color: #5C6470;
+  font-weight: medium;
+  font-size:1.3rem;
+}
+
+.ql-editor
+{
+  color: #5C6470;
+  font-weight: medium;
+  font-size:1.3rem;
+}
+
+
+`;
 const Page = ({ params }) => {
     const [postData, setPostData] = useState({});
     const [likeCount, setLikeCount] = useState(postData?.post?.[0]?.post_like); 
@@ -196,7 +228,13 @@ const Page = ({ params }) => {
                     </div>
 
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: postData?.post?.[0]?.content }}></div>
+                <div>
+                <CustomReactQuill
+                value={postData?.post?.[0]?.content}
+                readOnly={true}
+                modules={modules}
+            />
+                </div>
                 </div>
             )}
         </>

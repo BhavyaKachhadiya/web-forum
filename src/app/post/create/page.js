@@ -32,10 +32,19 @@ const CustomReactQuill = styled(ReactQuill)`
 {
   height:20rem;
 }
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  background: #15191E;
+  border-color: #15191E;
+  color: #5C6470;
+}
+.ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected,.ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button:focus .ql-stroke, .ql-snow .ql-toolbar button:focus .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow.ql-toolbar button:hover .ql-stroke-miter, .ql-snow .ql-toolbar button:hover .ql-stroke-miter, .ql-snow.ql-toolbar button:focus .ql-stroke-miter, .ql-snow .ql-toolbar button:focus .ql-stroke-miter, .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,.ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected,.ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button:hover .ql-fill {
+  color:#FF1717;
+  stroke:#FF1717;
+}
 `;
 const page = () => {
   const router = useRouter();
-  const {data:session} = useSession();
+  const { data: session } = useSession();
   console.log(session);
   if (!session) {
     // Redirect to login if not authenticated
@@ -110,75 +119,75 @@ const page = () => {
     }
   ];
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  // Collect form data using formData (consider using state management for large forms)
-  const title = event.target.title.value;
-const category_name = event.target.category.value;
-const content = value; // Assuming value contains the content from the editor
-const userId= session?.user?.id // Assuming you have access to the user ID from the session
-const user= session?.user?.id // Assuming you have access to the user ID from the session
-// const user = session?.user?.name // Assuming you have access to the user ID from the session
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Collect form data using formData (consider using state management for large forms)
+    const title = event.target.title.value;
+    const category_name = event.target.category.value;
+    const content = value; // Assuming value contains the content from the editor
+    const userId = session?.user?.id // Assuming you have access to the user ID from the session
+    const user = session?.user?.id // Assuming you have access to the user ID from the session
+    // const user = session?.user?.name // Assuming you have access to the user ID from the session
 
 
-  try {
-    const response = await axios.post('/api/posts', {
-      title,
-      userId,
-      content,
-      category_name,
-      user
-    });
-console.log("i am in")
-    if (response.status === 200) {
-      // Handle successful response (e.g., redirect to success page)
-      router.push('/');
-    } else {
-      throw new Error('Failed to post data');
+    try {
+      const response = await axios.post('/api/posts', {
+        title,
+        userId,
+        content,
+        category_name,
+        user
+      });
+      console.log("i am in")
+      if (response.status === 200) {
+        // Handle successful response (e.g., redirect to success page)
+        router.push('/');
+      } else {
+        throw new Error('Failed to post data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle errors appropriately (e.g., display error messages to the user)
     }
-  } catch (error) {
-    console.error('Error:', error);
-    // Handle errors appropriately (e.g., display error messages to the user)
-  }
-};
+  };
 
   return (
     <div>
       <form method="POST" onSubmit={handleSubmit}>
-      <div className="top flex mt-5">
-        <div className='img'>
-          <Image src={session?.user?.image} className='border-0 rounded-full' width={75} height={75} />
-        </div>
-        <div className='lg:ml-10 ml-3 flex flex-col justify-between w-[100%]'>
-          <div className='flex flex-row  justify-between '> <input type="text" name="title" id="title" className='outline-none bg-transparent placeholder:text-[1rem] placeholder:text-s-blue text-s-blue lg:w-[50rem] w-[15rem]' placeholder='Write a Question' /> <Link href={"/"} className='text-red'>X</Link> </div>
-          <div className="tags">
-            <select className='bg-transparent text-s-blue ' name="category" defaultValue={"other"}>
-              {data.map((item, index) => (
-                <optgroup label={item.category} key={index} className='bg-blue'>
-                  {item.subcategories && item.subcategories.map((subItem, subIndex) => (
-                    <option value={subItem.link} key={subIndex} className='bg-blue focus-visible:bg-white' >{subItem.name}</option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
+        <div className="top flex mt-5">
+          <div className='img'>
+            <Image src={session?.user?.image} className='border-0 rounded-full' width={75} height={75} />
+          </div>
+          <div className='lg:ml-10 ml-3 flex flex-col justify-between w-[100%]'>
+            <div className='flex flex-row  justify-between '> <input type="text" name="title" id="title" className='outline-none bg-transparent placeholder:text-[1rem] placeholder:text-s-blue text-s-blue lg:w-[50rem] w-[15rem]' placeholder='Write a Question' /> <Link href={"/"} className='text-red'>X</Link> </div>
+            <div className="tags">
+              <select className='bg-transparent text-s-blue ' name="category" defaultValue={"other"}>
+                {data.map((item, index) => (
+                  <optgroup label={item.category} key={index} className='bg-blue'>
+                    {item.subcategories && item.subcategories.map((subItem, subIndex) => (
+                      <option value={subItem.link} key={subIndex} className='bg-blue focus-visible:bg-white' >{subItem.name}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="bottom mt-5">
-        <CustomReactQuill
-          value={value}
-          onChange={handleChange}
-          modules={modules}
-          formats={formats}
-          theme="bubble"
-          placeholder="Write Description"
-          className="custom-toolbar"
-        />
-      </div>
+        <div className="bottom mt-5">
+          <CustomReactQuill
+            value={value}
+            onChange={handleChange}
+            modules={modules}
+            formats={formats}
+            theme="bubble"
+            placeholder="Write Description"
+            className="custom-toolbar"
+          />
+        </div>
 
-      <div>
-        <button type='submit' className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
-      </div>
+        <div>
+          <button type='submit' className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
+        </div>
       </form>
     </div>
   )
