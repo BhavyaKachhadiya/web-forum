@@ -19,7 +19,7 @@ const Sidebar = () => {
         },
         {
             category: "Frontend",
-            link: "/category/#frontend",
+            link: "/c#frontend",
             subcategories: [
                 { name: "Framework", link: "/category/framework" },
                 { name: "UI Framework", link: "/category/ui-framework" },
@@ -28,7 +28,7 @@ const Sidebar = () => {
         },
         {
             category: "Backend",
-            link: "/category/#backend",
+            link: "/c#backend",
             subcategories: [
                 { name: "Database", link: "/category/database" },
                 { name: "API", link: "/category/api" },
@@ -38,7 +38,7 @@ const Sidebar = () => {
         },
         {
             category: "Deployment",
-            link: "/category/#deployment",
+            link: "/c#deployment",
             subcategories: [
                 { name: "DevOps", link: "/category/devops" },
                 { name: "Continuous Integration", link: "/category/ci" },
