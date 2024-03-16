@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
+import React, { useState,useEffect } from 'react';
+import dynamic from 'next/dynamic'; 
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css'
@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const CustomReactQuill = styled(ReactQuill)`
 .ql-toolbar.ql-snow , .ql-container.ql-snow{border: none !important;}
@@ -46,11 +47,6 @@ const page = () => {
   const router = useRouter();
   const { data: session } = useSession();
   console.log(session);
-  if (!session) {
-    // Redirect to login if not authenticated
-    router.push('/login'); // Use appropriate routing library (e.g., react-router-dom)
-    return null;
-  }
   const [value, setValue] = useState('');
 
   const handleChange = (content) => {
@@ -61,7 +57,7 @@ const page = () => {
     toolbar: [
       [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
       [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote','code-block'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' },
       { 'indent': '-1' }, { 'indent': '+1' }],
       ['link'],
@@ -75,7 +71,7 @@ const page = () => {
 
   const formats = [
     'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'bold', 'italic', 'underline', 'strike', 'blockquote','code-block',
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ];
@@ -151,6 +147,27 @@ const page = () => {
     }
   };
 
+
+  const [ReactQuill, setReactQuill] = useState(null);
+  useEffect(() => {
+    // Dynamically import ReactQuill
+    async function importReactQuill() {
+      try {
+        const reactQuillModule = await import('react-quill');
+        setReactQuill(() => reactQuillModule.default);
+      } catch (error) {
+        console.error('Error importing ReactQuill:', error);
+      }
+    }
+
+    importReactQuill();
+    if (typeof window !== 'undefined') {
+      // Code that relies on browser-specific objects like `location`
+      let location = window.location;
+      console.log("Location : "+location);
+    }
+    
+  }, []); 
   return (
     <div>
       <form method="POST" onSubmit={handleSubmit}>
