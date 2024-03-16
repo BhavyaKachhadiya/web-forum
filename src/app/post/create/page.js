@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
-import React, { useState,useEffect } from 'react';
-import dynamic from 'next/dynamic'; 
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css'
@@ -10,6 +10,8 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CustomReactQuill = styled(ReactQuill)`
 .ql-toolbar.ql-snow , .ql-container.ql-snow{border: none !important;}
@@ -57,7 +59,7 @@ const page = () => {
     toolbar: [
       [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
       [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote','code-block'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' },
       { 'indent': '-1' }, { 'indent': '+1' }],
       ['link'],
@@ -71,7 +73,7 @@ const page = () => {
 
   const formats = [
     'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote','code-block',
+    'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block',
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ];
@@ -135,18 +137,32 @@ const page = () => {
         user
       });
       console.log("i am in")
+      
       if (response.status === 200) {
         // Handle successful response (e.g., redirect to success page)
         router.push('/');
-      } else {
+      } else{
         throw new Error('Failed to post data');
+        
       }
     } catch (error) {
       console.error('Error:', error);
+      notify();
       // Handle errors appropriately (e.g., display error messages to the user)
     }
   };
 
+  const notify = () => toast.error('Please, do login', {
+    position: "top-left",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    transition:"Bounce",
+    });
 
   const [ReactQuill, setReactQuill] = useState(null);
   useEffect(() => {
@@ -164,10 +180,10 @@ const page = () => {
     if (typeof window !== 'undefined') {
       // Code that relies on browser-specific objects like `location`
       let location = window.location;
-      console.log("Location : "+location);
+      console.log("Location : " + location);
     }
-    
-  }, []); 
+
+  }, []);
   return (
     <div>
       <form method="POST" onSubmit={handleSubmit}>
@@ -203,7 +219,20 @@ const page = () => {
         </div>
 
         <div>
-          <button type='submit' className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
+          <button type='submit' onError={()=> notify()} className='bg-red px-2 py-1 border-0 rounded-md'>Post</button>
+          <ToastContainer
+          position="top-left"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition="Bounce"
+        />
         </div>
       </form>
     </div>
