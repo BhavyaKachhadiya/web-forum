@@ -42,12 +42,21 @@ const Navbar = () => {
           <div className="absolute right-0 mt-2 w-48 bg-blue rounded-md shadow-lg z-10">
             <div className="py-1">
               {session ? (
+                <div>
+
+                <Link
+                  className="block px-4 py-2 text-sm text-gray-700 bg-s-blue hover:bg-red  w-full text-left"
+                  href={`/u/${session.user.name}`}
+                  >
+                  Profile
+                </Link>
                 <button
-                  className="block px-4 py-2 text-sm text-gray-700 bg-s-blue hover:bg-gray-100 w-full text-left"
+                  className="block px-4 py-2 text-sm text-gray-700 bg-s-blue hover:bg-red w-full text-left"
                   onClick={handleSignOut}
-                >
+                  >
                   Logout
                 </button>
+                  </div>
               ) : (
                 <div>
                 <Link href={"/login"} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
