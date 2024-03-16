@@ -31,7 +31,7 @@ const Posts = () => {
   }, []); // Empty dependency array ensures the effect runs only once
 
   return (
-    <div>
+    <div className='flex flex-col-reverse'>
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}

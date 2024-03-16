@@ -22,7 +22,7 @@ const CategoryPosts = ({ category }) => {
   }, [category]);
 
   return (
-    <div>
+    <div className='flex flex-col-reverse'>
       {categoryPosts.map(post => (
         <Post key={post.id} post={post} />
       ))}
