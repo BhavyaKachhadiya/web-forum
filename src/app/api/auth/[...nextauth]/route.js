@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client'
 import { NextResponse } from 'next/server';
 const prisma = new PrismaClient();
 const handle = NextAuth({
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID, 
